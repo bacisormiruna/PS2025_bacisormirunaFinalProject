@@ -27,6 +27,7 @@ public class CourseService {
     private final ObjectMapper objectMapper;
     private final WebClient webClientBuilder;
     private final UserService userService;
+    private EnrollmentService enrollmentService;
 
     public Flux<CourseDTO> getCoursesFromM2(String authHeader) {
         return webClientBuilder
@@ -115,21 +116,21 @@ public class CourseService {
                 .block();
     }
 
-    public void deleteCourse(Long postId, Long userId, String authHeader) throws CourseNotFoundException, UnauthorizedException {
+    public void deleteCourse1(Long courseId, Long userId, String authHeader) throws CourseNotFoundException, UnauthorizedException {
         try {
             String userRole = userService.getUserRoleById(userId);
             if (userRole.equals("admin")) {
                 webClientBuilder.delete()
-                        .uri("/api/course/" + postId)
+                        .uri("/api/course/" + courseId)
                         .header("Authorization", authHeader)
                         .retrieve()
                         .toBodilessEntity()
                         .block();
             } else {
-                CourseDTO courseDTO = getPostDTOById(postId);
+                CourseDTO courseDTO = getPostDTOById(courseId);
                 if (courseDTO.getMentorId().equals(userId)) {
                     webClientBuilder.delete()
-                            .uri("/api/course/" + postId)
+                            .uri("/api/course/" + courseId)
                             .header("Authorization", authHeader)
                             .retrieve()
                             .toBodilessEntity()
@@ -139,7 +140,7 @@ public class CourseService {
                 }
             }
         } catch (WebClientResponseException.NotFound e) {
-            throw new CourseNotFoundException("Post not found with id: " + postId);
+            throw new CourseNotFoundException("Post not found with id: " + courseId);
         } catch (WebClientResponseException.Forbidden e) {
             throw new UnauthorizedException("You can only delete your own posts");
         } catch (Exception e) {
@@ -170,4 +171,42 @@ public class CourseService {
                 .bodyToFlux(CourseDTO.class);
 
     }
+
+    public void deleteCourse(Long postId, Long userId, String authHeader) throws CourseNotFoundException, UnauthorizedException {
+        try {
+            String userRole = userService.getUserRoleById(userId);
+            if (userRole.equals("admin")) {
+                enrollmentService.deleteEnrollmentsByCourseId(postId);
+                webClientBuilder.delete()
+                        .uri("/api/course/" + postId)
+                        .header("Authorization", authHeader)
+                        .retrieve()
+                        .toBodilessEntity()
+                        .block();
+            } else {
+                CourseDTO courseDTO = getPostDTOById(postId);
+                if (courseDTO.getMentorId().equals(userId)) {
+                    enrollmentService.deleteEnrollmentsByCourseId(postId); // Șterge enrollments și aici
+
+                    webClientBuilder.delete()
+                            .uri("/api/course/" + postId)
+                            .header("Authorization", authHeader)
+                            .retrieve()
+                            .toBodilessEntity()
+                            .block();
+                } else {
+                    throw new UnauthorizedException("You can only delete your own posts");
+                }
+            }
+        } catch (WebClientResponseException.NotFound e) {
+            throw new CourseNotFoundException("Post not found with id: " + postId);
+        } catch (WebClientResponseException.Forbidden e) {
+            throw new UnauthorizedException("You can only delete your own posts");
+        } catch (Exception e) {
+            throw new RuntimeException("Error when deleting post: " + e.getMessage(), e);
+        }
+    }
+
+
+
 }

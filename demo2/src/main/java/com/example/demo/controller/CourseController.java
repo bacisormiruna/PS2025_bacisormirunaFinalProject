@@ -17,11 +17,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 
+
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(value = "/api/course")
 @RequiredArgsConstructor
 public class CourseController {
@@ -139,9 +139,19 @@ public class CourseController {
         return ResponseEntity.ok("Service is running!");
     }
 
+//    @GetMapping("/{id}")
+//    public ResponseEntity<CourseDTO> getCourseById(@PathVariable Long id) throws CourseNotFoundException {
+//        return ResponseEntity.ok(courseService.getCourseById(id));
+//    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<CourseDTO> getPostById(@PathVariable Long id) throws CourseNotFoundException {
-        return ResponseEntity.ok(courseService.getCourseById(id));
+    public ResponseEntity<?> getCourseById(@PathVariable Long id) {
+        try {
+            CourseDTO course = courseService.getCourseById(id);
+            return ResponseEntity.ok(course);
+        } catch (CourseNotFoundException e) {
+            return ResponseEntity.ok("Course not found with this id:"+id);
+        }
     }
 
     @GetMapping("/{courseId}/users")

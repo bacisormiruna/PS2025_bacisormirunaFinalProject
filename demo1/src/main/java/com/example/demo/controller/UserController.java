@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 
 import com.example.demo.dto.coursedto.CourseDTO;
+import com.example.demo.dto.enrollmentdto.EnrollmentViewDTO;
 import com.example.demo.dto.responsedto.ResponseDTO;
 import com.example.demo.dto.userdto.UserDTO;
 import com.example.demo.dto.userdto.UserViewDTO;
@@ -221,7 +222,6 @@ public class UserController {
     }
 
 
-
     @PostMapping("/request/{courseId}")
     public ResponseEntity<?> sendEnrollRequest(
             @RequestHeader(value = "Authorization", required = false) String authHeader,
@@ -241,7 +241,6 @@ public class UserController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                         .body("Invalid token");
             }
-
             enrollmentService.sendEnrollRequest(cursantId, courseId);
             return ResponseEntity.ok("Enrollment request sent successfully.");
 
@@ -261,7 +260,6 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("Token missing or invalid format");
         }
-
         try {
             String token = authHeader.substring(7);
             Long mentorId = jwtService.extractUserId(token);
@@ -271,8 +269,8 @@ public class UserController {
                         .body("Invalid token");
             }
             enrollmentService.updateEnrollmentStatus(mentorId, cursantId, courseId, request.getStatus());
-            return ResponseEntity.ok("Enrollment status updated successfully.");
-
+            //return ResponseEntity.ok("Enrollment status updated successfully.");
+            return ResponseEntity.ok(Map.of("message", "Enrollment status updated successfully."));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -283,7 +281,28 @@ public class UserController {
         return enrollmentService.findCursantByCourseId(courseId);
     }
 
+    @GetMapping("/users/accepted/{courseId}")
+    public List<UserViewDTO> getUsersAcceptedInCourse(@PathVariable Long courseId) {
+        return enrollmentService.findCursantAcceptedByCourseId(courseId);
+    }
+    @GetMapping("/enrollmentRequests/{courseId}")
+    public List<EnrollmentViewDTO> getEnrollmentRequestsByCourseId(@PathVariable Long courseId) {
+        return enrollmentService.findEnrollmentRequestsByCourseId(courseId);
+    }
 
-
+    @GetMapping("/my-enrollments")
+    public ResponseEntity<List<EnrollmentViewDTO>> getMyEnrollments(
+            @RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String token = authHeader.substring(7);
+        Long userId = jwtService.extractUserId(token);
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        List<EnrollmentViewDTO> enrollments = enrollmentService.getEnrollmentsForUser1(userId);
+        return ResponseEntity.ok(enrollments);
+    }
 
 }

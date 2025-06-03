@@ -108,9 +108,10 @@ public class CourseService {
                 .map(courseMapper::toDto)
                 .collect(Collectors.toList());
     }
+
     public List<UserViewDTO> getUsersEnrolledInCourse(Long courseId) {
         return usersMicroserviceClient.get()
-                .uri("api/enrollment/users/enrolled/{courseId}", courseId)
+                .uri("api/user/users/accepted/{courseId}", courseId)
                 .retrieve()
                 .bodyToFlux(UserViewDTO.class)
                 .collectList()

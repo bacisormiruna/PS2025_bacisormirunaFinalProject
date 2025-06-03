@@ -61,7 +61,7 @@ public class CourseController {
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<CourseDTO> createPost(
+    public ResponseEntity<CourseDTO> createCourse(
             @RequestHeader ("Authorization") String authHeader,
             @RequestPart("courseDto") String courseDtoJson,
             @RequestPart(value = "image", required = false) MultipartFile imageFile) throws Exception {

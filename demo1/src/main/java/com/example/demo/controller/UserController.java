@@ -81,18 +81,6 @@ public class UserController {
         return ResponseEntity.ok("Service is running!");
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<String> login(@RequestBody UserDTO loginDTO) {
-//        try {
-//            System.out.println("Received login request name for user: " + loginDTO.getName());
-//            System.out.println("Received login request password for user: " + loginDTO.getPassword());
-//            String token = userService.verify(loginDTO);
-//            return ResponseEntity.ok(token);
-//        } catch (UserException e) {
-//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-//        }
-//    }
-
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody UserDTO loginDTO) {
         try {

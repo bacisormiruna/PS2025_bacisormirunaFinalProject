@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-//aici aveam si password encoder
 @Service
 public class UserService {
 

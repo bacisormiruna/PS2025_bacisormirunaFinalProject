@@ -1,0 +1,38 @@
+<div class="row" *ngIf="courses.length > 0; else noCourses">-->
+  <div class="col-md-4" *ngFor="let course of courses">
+    <div class="card">
+      <img
+        *ngIf="course.image"
+        [src]="'data:image/jpeg;base64,' + course.image"
+        alt="Course Image"
+        class="card-img-top"
+      />
+      <div class="card-body">
+        <h5 class="card-title">{{ course.title }}</h5>
+        <p class="card-text">{{ course.description }}</p>
+        <p class="card-text"><strong>Category:</strong> {{ course.category }}</p>
+        <p class="card-text"><strong>Duration:</strong> {{ course.duration }} h</p>
+        <button
+          *ngIf="roleName === 'MENTOR'"
+          class="btn btn-danger"
+          (click)="deleteCourse(course.id!)"
+        >
+          Delete Course
+        </button>
+        <button
+          *ngIf="roleName === 'USER'"
+          class="btn btn-primary"
+          (click)="enroll(course.id!)"
+        >
+          Enroll to this course
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #noCourses>
+  <p class="no-courses-message">
+    Share what you know with the world. Get started and create your first course
+  </p>
+</ng-template>

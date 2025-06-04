@@ -1,0 +1,236 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.parent {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #000000, #0f1c2e, #192f4d, #17428a);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  position: relative;
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.4;
+}
+
+.logo-top-left {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 50px;
+  height: auto;
+  z-index: 1000;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.logo-top-left:hover {
+  transform: scale(1.1);
+}
+
+.container {
+  width: 400px;
+  color: #fff;
+  padding: 30px 40px;
+  border-radius: 15px;
+  background: #2a2a2a;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #ffffff;
+}
+
+.input-box {
+  position: relative;
+  width: 100%;
+  margin: 30px 0;
+  height: auto;
+  min-height: 40px;
+}
+
+.input-box input {
+  width: 100%;
+  background: rgba(58, 58, 58, 0.5);
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  color: #fff;
+  border: 1px solid #3a3a3a;
+  font-size: 16px;
+  padding: 10px;
+  transition: all 0.3s ease;
+}
+
+.input-box input:focus {
+  border-color: #1a73e8;
+  box-shadow: 0 0 10px rgba(26, 115, 232, 0.4);
+}
+
+.input-box i {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 20px;
+  color: #4285f4;
+}
+
+.remember {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  margin: -10px 0 15px;
+  color: #cccccc;
+}
+
+.remember label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.remember input[type="checkbox"] {
+  margin-right: 8px;
+  accent-color: #4285f4;
+}
+
+.remember a {
+  color: #4285f4;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.remember a:hover {
+  color: #1a73e8;
+  text-decoration: underline;
+}
+
+.btn {
+  width: 100%;
+  height: 45px;
+  background: linear-gradient(135deg, #4285f4, #1a73e8);
+  color: #fff;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  box-shadow: 0 0 15px rgba(26, 115, 232, 0.5);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.btn:hover {
+  background: linear-gradient(135deg, #1a73e8, #0d47a1);
+  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(26, 115, 232, 0.7);
+}
+
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 0 10px rgba(26, 115, 232, 0.5);
+}
+
+.btn:disabled {
+  background: #6c6c6c;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+button.btn {
+  appearance: none;
+  -webkit-appearance: none;
+  user-select: auto;
+  pointer-events: auto;
+}
+
+form {
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.register {
+  font-size: 14px;
+  margin-top: 20px;
+  text-align: center;
+  color: #cccccc;
+}
+
+.register p a {
+  font-weight: 600;
+  color: #4285f4;
+  font-size: 16px;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.register p a:hover {
+  color: #1a73e8;
+  text-decoration: underline;
+}
+
+.text-danger {
+  color: #ff6b6b;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+
+.validation-message small {
+  color: #ff6b6b;
+  margin-top: 5px;
+  display: block;
+  font-size: 14px;
+}
+
+.error-message {
+  background-color: rgba(255, 0, 0, 0.2);
+  color: #ff6b6b;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+* {
+  pointer-events: auto;
+}
+
+:focus {
+  outline: none;
+}

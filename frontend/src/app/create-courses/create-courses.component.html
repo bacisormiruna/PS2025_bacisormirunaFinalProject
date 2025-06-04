@@ -1,0 +1,59 @@
+<form (ngSubmit)="createCourse()" #courseForm="ngForm">
+  <label>
+    Title:
+    <input type="text" [(ngModel)]="title" name="title" required #titleInput="ngModel" />
+  </label>
+  <div *ngIf="titleInput.invalid && titleInput.touched" style="color:red">
+    This field is required.
+  </div>
+  <br/>
+
+  <label>
+    Description:
+    <textarea [(ngModel)]="description" name="description" required #descInput="ngModel"></textarea>
+  </label>
+  <div *ngIf="descInput.invalid && descInput.touched" style="color:red">
+    This field is required.
+  </div>
+  <br/>
+
+  <label>
+    Category:
+    <input type="text" [(ngModel)]="category" name="category" required #catInput="ngModel" />
+  </label>
+  <div *ngIf="catInput.invalid && catInput.touched" style="color:red">
+    This field is required.
+  </div>
+  <br/>
+
+  <label>
+    Duration (hours):
+    <input type="number" [(ngModel)]="duration" name="duration" required min="1" #durInput="ngModel" />
+  </label>
+  <div *ngIf="(durInput.invalid && durInput.touched) || duration < 1" style="color:red">
+    Duration can not be 0.
+  </div>
+  <br/>
+
+  <label>
+    Status:
+    <select [(ngModel)]="status" name="status" required>
+      <option *ngFor="let s of statusOptions" [ngValue]="s">{{ s }}</option>
+    </select>
+  </label>
+  <br/>
+
+  <label>
+    Certificate Available:
+    <input type="checkbox" [(ngModel)]="certificateAvailable" name="certificateAvailable" />
+  </label>
+  <br/>
+
+  <label>
+    Course Image:
+    <input type="file" (change)="onFileSelected($event)" />
+  </label>
+  <br/>
+
+  <button type="submit" [disabled]="courseForm.invalid">Create Course</button>
+</form>

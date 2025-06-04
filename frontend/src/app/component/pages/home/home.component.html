@@ -1,0 +1,185 @@
+<div class="home-container">
+  <div *ngIf="roleName === 'MENTOR'; else normalUserTemplate">
+    <div class="top-right">
+      <button class="btn btn-danger me-2" (click)="logout()">Logout</button>
+      <button class="btn btn-primary" (click)="goToCreateCourse()">Creare Curs</button>
+    </div>
+    <div class="container mt-5">
+      <h2>Your masterpieces on going:</h2>
+
+      <div *ngIf="courses.length > 0; else noCoursesMentor">
+        <div class="row">
+          <div class="col-md-4" *ngFor="let course of courses">
+            <div class="card mb-4">
+              <img
+                *ngIf="course.image"
+                [src]="'data:image/jpeg;base64,' + course.image"
+                class="card-img-top"
+                alt="Course Image"
+              />
+              <div class="card-body">
+                <h5 class="card-title">{{ course.title }}</h5>
+                <p class="card-text">{{ course.description }}</p>
+                <button
+                  class="btn btn-danger"
+                  (click)="deleteCourse(course.id!)"
+                >
+                  Șterge
+                </button>
+                <button
+                  class="btn btn-secondary ms-2"
+                  (click)="toggleRequests(course.id!)"
+                >
+                  {{
+                    showRequestsForCourse === course.id
+                      ? 'Hide Requests'
+                      : 'View Requests'
+                  }}
+                </button>
+                <button
+                  class="btn btn-info ms-2"
+                  (click)="loadAcceptedUsers(course.id!)"
+                >
+                  {{
+                    showEnrolledForCourse === course.id
+                      ? 'Ascunde Utilizatori'
+                      : 'Vezi Utilizatori Înregistrați'
+                  }}
+                </button>
+              </div>
+              <div
+                *ngIf="showRequestsForCourse === course.id"
+                class="p-3 bg-dark text-light"
+              >
+                <h6>Pending Requests</h6>
+                <div *ngIf="pendingRequests.length > 0; else noReq">
+                  <ul class="list-group list-group-flush">
+                    <li
+                      class="list-group-item bg-transparent text-light d-flex justify-content-between align-items-center"
+                      *ngFor="let u of pendingRequests"
+                    >
+                      <span>{{ u.name }} ({{ u.email }})</span>
+                      <div>
+                        <button
+                          class="btn btn-success btn-sm me-1"
+                          [disabled]="processedRequests.has(u.id)"
+                          (click)="respond(u.id, course.id!, 'ACCEPTED')"
+                        >
+                          {{ processedRequests.has(u.id) ? 'Acceptat' : 'Accept' }}
+                        </button>
+                        <button
+                          class="btn btn-danger btn-sm"
+                          [disabled]="processedRequests.has(u.id)"
+                          (click)="respond(u.id, course.id!, 'REJECTED')"
+                        >
+                          {{ processedRequests.has(u.id) ? 'Respins' : 'Reject' }}
+                        </button>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <ng-template #noReq>
+                  <p class="text-muted">No pending requests.</p>
+                </ng-template>
+              </div>
+              <div
+                *ngIf="showEnrolledForCourse === course.id"
+                class="p-3 bg-light border-top"
+              >
+                <h6 class="text-dark">Utilizatori înregistrați</h6>
+                <div *ngIf="acceptedUsersForCourse.length > 0; else noUsers">
+                  <ul class="list-group">
+                    <li
+                      class="list-group-item d-flex justify-content-between align-items-center"
+                      *ngFor="let user of acceptedUsersForCourse"
+                    >
+                      {{ user.name }} ({{ user.email }})
+                    </li>
+                  </ul>
+                </div>
+                <ng-template #noUsers>
+                  <p class="text-muted">No user enrolled in this course.</p>
+                </ng-template>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <ng-template #noCoursesMentor>
+      <p>
+        You haven't created any courses yet. Create one to see its pending
+        requests!
+      </p>
+      </ng-template>
+    </div>
+  </div>
+</div>
+  <ng-template #normalUserTemplate>
+    <div class="top-right">
+      <button class="btn btn-danger me-2" (click)="logout()">Logout</button>
+      <button class="btn btn-primary me-2" (click)="showAllCourses()" [class.active]="!showEnrollments">All Courses</button>
+      <button class="btn btn-primary" (click)="loadMyEnrollments()" [class.active]="showEnrollments">My Courses</button>
+    </div>
+
+    <div class="container mt-5">
+      <h2 *ngIf="!showEnrollments">Ready to change the world? Learn from the best courses</h2>
+      <h2 *ngIf="showEnrollments">My Enrollments</h2>
+      <div *ngIf="!showEnrollments">
+        <div *ngIf="courses.length > 0; else noCoursesUser">
+          <div class="row">
+            <div class="col-md-4" *ngFor="let course of courses">
+              <div class="card">
+                <img
+                  *ngIf="course.image"
+                  [src]="'data:image/jpeg;base64,' + course.image"
+                  alt="Course Image"
+                  class="card-img-top"
+                />
+                <div class="card-body">
+                  <h5 class="card-title">{{ course.title }}</h5>
+                  <p class="card-text">{{ course.description }}</p>
+                  <p class="card-text">
+                    <strong>Category:</strong> {{ course.category }}
+                  </p>
+                  <p class="card-text">
+                    <strong>Duration:</strong> {{ course.duration }} h
+                  </p>
+                  <button
+                    class="btn btn-success mt-2"
+                    (click)="enroll(course.id!)"
+                  >
+                    Enroll
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ng-template #noCoursesUser>
+        <p>Courses will be available soon. Please check back later.</p>
+  </ng-template>
+</div>
+<div *ngIf="showEnrollments">
+  <div *ngIf="myEnrollments.length > 0; else noEnrollments">
+    <div class="row">
+      <div class="col-md-4" *ngFor="let e of myEnrollments">
+        <div class="card course-card">
+          <div class="card-body">
+            <h5 class="card-title">{{ e.course.title }}</h5>
+            <p class="card-text">{{ e.course.description }}</p>
+            <p><strong>Status:</strong> {{ e.status }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #noEnrollments>
+    <p>You have no enrollment requests yet.</p>
+  </ng-template>
+</div>
+<div id="notification" *ngIf="showNotification" class="notification">
+  {{ notificationMessage }}
+</div>
+    </div>
+  </ng-template>
+

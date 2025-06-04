@@ -1,0 +1,110 @@
+.parent {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #1e1e1e;
+}
+
+.container {
+  background-color: #2e2e2e;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+  width: 100%;
+  max-width: 400px;
+}
+
+h1 {
+  text-align: center;
+  color: #ffffff;
+  margin-bottom: 24px;
+}
+
+.input-box {
+  position: relative;
+  margin-bottom: 20px;
+
+  input {
+    width: 100%;
+    padding: 12px 40px 12px 12px;
+    background-color: #444;
+    border: 1px solid #666;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+
+    &::placeholder {
+      color: #bbb;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: #00bcd4;
+    }
+  }
+
+  i {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+  }
+}
+
+.validation-message small {
+  color: #ff6b6b;
+  font-size: 12px;
+}
+
+.error-message {
+  color: #ff6b6b;
+  margin-bottom: 20px;
+  text-align: center;
+  background-color: rgba(255, 107, 107, 0.1);
+  padding: 10px;
+  border-radius: 6px;
+}
+
+/* Buton Register */
+.btn {
+  width: 100%;
+  background-color: #00bcd4; /* Turcoaz */
+  color: #fff;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #00acc1;
+  }
+
+  &:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+  }
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 16px;
+
+  p {
+    color: #ccc;
+    font-size: 14px;
+
+    a {
+      color: #00bcd4;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
